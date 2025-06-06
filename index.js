@@ -70,5 +70,19 @@ app.post('/expenses', (req, res) => {
   res.json({ message: 'Expense added' });
 });
 
+// delete data
+app.delete("/data", (req, res) => {
+  try {
+    const emptyData = {
+      formData: { total: 0, budget: 0 },
+      expenses: [],
+    };
+    writeData(emptyData);
+    res.status(200).json({ message: "Data reset successfully." });
+  } catch (err) {
+    console.error("error:", err);
+  }
+});
+
 const PORT = 3001;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

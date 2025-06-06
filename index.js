@@ -8,11 +8,30 @@ app.use(express.json());
 
 const DATA_FILE = './data.json';
 
+const readData = () => {
+  try {
+    const raw = fs.readFileSync(DATA_FILE, 'utf-8');
+    return JSON.parse(raw);
+  } catch (err) {
+    console.error('Error reading data file:', err.message);
+    return { formData: { total: 0, budget: 0 }, expenses: [] }; // default structure
+  }
+};
+
+// Safe write
+const writeData = (data) => {
+  try {
+    fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2));
+  } catch (err) {
+    console.error('Error writing data file:', err.message);
+  }
+};
+
 // Helper function to read data
-const readData = () => JSON.parse(fs.readFileSync(DATA_FILE));
+// const readData = () => JSON.parse(fs.readFileSync(DATA_FILE));
 
 // Helper function to write data
-const writeData = (data) => fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2));
+// const writeData = (data) => fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2));
 
 // GET all data
 app.get('/data', (req, res) => {
@@ -22,10 +41,25 @@ app.get('/data', (req, res) => {
 
 // POST form data
 app.post('/formData', (req, res) => {
-  const data = readData();
-  data.formData = req.body;
-  writeData(data);
-  res.json({ message: 'Form data saved' });
+  try {
+      const data = readData();
+      data.formData = req.body;
+      writeData(data);
+      res.json({ message: 'Form data saved' });
+  } catch (err) {
+    console.error("Error:", err);
+  }
+});
+// POST form data
+app.post('/data', (req, res) => {
+  try {
+      const data = readData();
+      data.formData = req.body;
+      writeData(data);
+      res.json({ message: 'Form data saved' });
+  } catch (err) {
+    console.error("Error:", err);
+  }
 });
 
 // POST new expense

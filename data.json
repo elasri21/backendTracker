@@ -1,8 +1,12 @@
 {
   "formData": {
-    "total": 0,
-    "budget": 0
+    "total": 110300,
+    "budget": 4000
   },
   "expenses": [
+    {
+      "name": "withdraw",
+      "amount": 2000
+    }
   ]
 }
